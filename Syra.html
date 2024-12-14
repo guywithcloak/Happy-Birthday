@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Greeting</title>
+    <style>
+        body {
+            font-family: 'Arial, sans-serif';
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url(https://i.pinimg.com/originals/d0/af/dd/d0afddeff621d3b1486fa6b377cb079c.gif) no-repeat center;
+            background-size: contain;
+            color: #333;
+        }
+
+        .greeting-card {
+            text-align: center;
+            background: transparent;
+            padding: 20px;
+            border-radius: 15px;
+           
+        }
+
+        .greeting-card h1 {
+            font-size: 2.5rem;
+            color: #ff6f61;
+            -webkit-text-stroke: 1px black;
+            margin: 0;
+        }
+
+        .greeting-card p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .greeting-card button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .greeting-card button:hover {
+            background-color: #e0554e;
+        }
+
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="greeting-card">
+        <h1>HAPPY BIRTHDAY VEBZZZ!!</h1>
+        <p>Wishing you the best, always!:*</p>
+        <button onclick="showConfetti()">Click diz</button>
+    </div>
+
+    <canvas class="confetti"></canvas>
+
+    <script>
+        function showConfetti() {
+            const canvas = document.querySelector('.confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiColors = ['#FF6F61', '#FF9A9E', '#FAD0C4', '#FFD700', '#FFA07A'];
+            const confettiPieces = [];
+
+            class Confetti {
+                constructor(x, y, size, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = size;
+                    this.color = color;
+                    this.velocity = {
+                        x: Math.random() * 2 - 1,
+                        y: Math.random() * 3 + 2
+                    };
+                }
+
+                update() {
+                    this.y += this.velocity.y;
+                    this.x += this.velocity.x;
+                    if (this.y > canvas.height) {
+                        this.y = 0;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.size, this.size);
+                }
+            }
+
+            for (let i = 0; i < 150; i++) {
+                const size = Math.random() * 10 + 5;
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                confettiPieces.push(new Confetti(x, y, size, color));
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confettiPieces.forEach(piece => {
+                    piece.update();
+                    piece.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
+
+</body>
+</html>
